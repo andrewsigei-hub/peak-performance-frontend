@@ -167,7 +167,7 @@ function Lifts() {
       <Navbar />
 
       <div className="max-w-7xl mx-auto px-6 py-8">
-        {/* Page header */}
+        // Header
         <div className="flex justify-between items-center mb-8">
           <h1 className="text-4xl font-bold">Strength Training</h1>
           <button
@@ -180,7 +180,7 @@ function Lifts() {
           </button>
         </div>
 
-        {/* Form to add workout */}
+        // Add workout form
         {showForm && (
           <form
             onSubmit={handleAddWorkout}
@@ -215,7 +215,7 @@ function Lifts() {
               </div>
             </div>
 
-            {/* Exercise inputs */}
+            
             <div className="mb-4">
               <label className="block text-sm text-gray-400 mb-2">
                 Exercises
@@ -294,7 +294,7 @@ function Lifts() {
                   key={workout.id}
                   className="bg-gray-900 p-6 rounded-xl border border-gray-800 hover:border-yellow-400 transition"
                 >
-                  {/* Top row */}
+                  
                   <div className="flex justify-between items-start mb-3">
                     <div className="text-sm text-gray-400">{workout.date}</div>
                     <button

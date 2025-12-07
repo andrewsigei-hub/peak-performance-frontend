@@ -78,10 +78,10 @@ function Dashboard() {
         {/* Welcome message */}
         <div className="mb-8">
           <h1 className="text-4xl font-bold mb-2">
-            Hey {user.name}! 👋
+            Hey {user.name}! 
           </h1>
           <p className="text-gray-400 text-lg">
-            You've logged {workouts.length} workouts so far 🔥
+            You've logged {workouts.length} workouts so far and logged {meals.length} meals.
           </p>
         </div>
 
@@ -107,7 +107,7 @@ function Dashboard() {
 
         <div className="grid grid-cols-1 lg:grid-cols-2 gap-8">
           
-          {/* Recent workouts section */}
+          
           <div>
             <div className="flex justify-between items-center mb-4">
               <h2 className="text-2xl font-bold">Recent Workouts</h2>
@@ -148,7 +148,7 @@ function Dashboard() {
             </div>
           </div>
 
-          {/* Recent meals section */}
+          
           <div>
             <div className="flex justify-between items-center mb-4">
               <h2 className="text-2xl font-bold">Recent Meals</h2>

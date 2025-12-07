@@ -130,7 +130,7 @@ function Runs() {
           </button>
         </div>
 
-        {/* Form to add new run */}
+    // Form to add run
         {showForm && (
           <form
             onSubmit={handleAddRun}
@@ -202,7 +202,7 @@ function Runs() {
           </form>
         )}
 
-        {/* Display all runs in cards */}
+      // Runs grid
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
           {runs.length === 0 ? (
             <div className="col-span-full bg-gray-900 p-8 rounded-xl border border-gray-800 text-center text-gray-400">
@@ -245,17 +245,17 @@ function Runs() {
                     </div>
                   </div>
 
-                  {/* Main distance display */}
+              
                   <div className="text-3xl font-bold text-yellow-400 mb-1">
                     {run.distance_km} km
                   </div>
 
-                  {/* Duration */}
+            
                   <div className="text-gray-300 mb-2">
                     {run.duration_min} minutes
                   </div>
 
-                  {/* Pace if available */}
+                
                   {run.avg_pace && (
                     <div className="text-sm text-gray-400">
                       Pace: {run.avg_pace} min/km

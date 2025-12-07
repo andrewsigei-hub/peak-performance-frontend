@@ -62,7 +62,6 @@ function Navbar() {
   return (
     <nav className="bg-gray-950 border-b border-gray-800 text-white">
       <div className="max-w-7xl mx-auto px-6 py-4 flex items-center justify-between">
-        {/* Logo - Clickable to go home */}
         <h1
           className="text-2xl font-bold text-yellow-400 hover:text-yellow-500 transition cursor-pointer"
           onClick={goToHome}
@@ -70,7 +69,7 @@ function Navbar() {
           PeakPerform
         </h1>
 
-        {/* Desktop Menu */}
+        
         <div className="hidden md:flex items-center gap-6">
           {navItems.map(function (item) {
             return (
@@ -84,7 +83,7 @@ function Navbar() {
             );
           })}
 
-          {/* Show Logout if user is logged in, otherwise Sign In */}
+          
           {user ? (
             <div className="flex items-center gap-4">
               <span className="text-gray-300">Hi, {user.name}</span>
@@ -105,7 +104,7 @@ function Navbar() {
           )}
         </div>
 
-        {/* Mobile Hamburger */}
+        
         <div className="md:hidden">
           <button
             onClick={toggleMenu}
@@ -146,7 +145,7 @@ function Navbar() {
         </div>
       </div>
 
-      {/* Mobile Menu */}
+    // Mobile Menu
       {isOpen && (
         <div className="md:hidden px-6 pb-4 flex flex-col gap-3">
           {navItems.map(function (item) {
@@ -164,7 +163,7 @@ function Navbar() {
             );
           })}
 
-          {/* Show Logout if user is logged in, otherwise Sign In */}
+          
           {user ? (
             <>
               <span className="text-gray-300">Hi, {user.name}</span>
