@@ -82,9 +82,9 @@ function Dashboard() {
       <div className="max-w-7xl mx-auto px-6 py-8">
         {/* Welcome Section */}
         <div className="mb-8">
-          <h1 className="text-4xl font-bold mb-2">Hey {user.name}! 👋</h1>
+          <h1 className="text-4xl font-bold mb-2">Hey {user.name}! </h1>
           <p className="text-gray-400 text-lg">
-            You've logged {workouts.length} workouts so far 🔥
+            You've logged {workouts.length} workouts so far
           </p>
         </div>
 
@@ -209,8 +209,8 @@ function Dashboard() {
                             {meal.calories} cal
                           </div>
                           <div className="text-xs text-gray-400">
-                            Proteins: {meal.protein}g · Carbs: {meal.carbs}g · Fats:{" "}
-                            {meal.fat}g
+                            Proteins: {meal.protein}g · Carbs: {meal.carbs}g ·
+                            Fats: {meal.fat}g
                           </div>
                         </div>
                       </div>
