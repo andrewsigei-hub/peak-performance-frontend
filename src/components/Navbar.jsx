@@ -35,9 +35,6 @@ function Navbar() {
     navigate("/meals");
   }
 
-  function goToProgress() {
-    navigate("/progress");
-  }
 
   function goToLifts() {
     navigate("/lifts");
@@ -59,7 +56,6 @@ function Navbar() {
     { label: "Meals", action: goToMeals },
     { label: "Lifts", action: goToLifts },
     { label: "Runs", action: goToRuns },
-    { label: "Progress", action: goToProgress },
     { label: "Dashboard", action: goToDashboard },
   ];
 
