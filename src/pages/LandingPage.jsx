@@ -1,19 +1,23 @@
 import { useNavigate } from "react-router-dom";
 
-const LandingPage = () => {
+function LandingPage() {
   const navigate = useNavigate();
 
-  // Smooth scroll helper
-  const scrollToSection = (id) => {
-    const element = document.getElementById(id);
-    if (element) element.scrollIntoView({ behavior: "smooth" });
-  };
+  function goToLogin() {
+    navigate("/login");
+  }
 
-  // Navigation helpers
-  const goToLogin = () => navigate("/login");
-  const goToMeals = () => navigate("/meals");
-  const goToLifts = () => navigate("/lifts");
-  const goToRuns = () => navigate("/runs");
+  function goToMeals() {
+    navigate("/meals");
+  }
+
+  function goToLifts() {
+    navigate("/lifts");
+  }
+
+  function goToRuns() {
+    navigate("/runs");
+  }
 
   return (
     <div className="bg-gray-950 text-white min-h-screen">
@@ -33,32 +37,40 @@ const LandingPage = () => {
           <div className="flex flex-col sm:flex-row gap-4 mb-12">
             <button
               onClick={goToLogin}
-              className="bg-yellow-400 text-black px-8 py-4 rounded-xl font-semibold flex items-center gap-3 hover:bg-yellow-500 transition shadow-lg"
+              className="bg-yellow-400 text-black px-8 py-4 rounded-xl font-semibold hover:bg-yellow-500 transition shadow-lg"
             >
               Get Started
-            </button>
-
-            <button
-              onClick={() => scrollToSection("features")}
-              className="border border-gray-600 px-8 py-4 rounded-xl text-gray-300 hover:text-white transition"
-            >
-              Learn More
             </button>
           </div>
 
           {/* Feature Highlights */}
-          <div id="features" className="flex flex-wrap gap-8 mt-6">
-            <div className="flex items-center gap-2">
-              <span className="text-3xl">⏱️</span>
-              <span className="text-gray-300 cursor-pointer" onClick={goToRuns}>Runs</span>
+          <div className="flex flex-wrap gap-8 mt-6">
+            <div
+              className="flex items-center gap-2 cursor-pointer"
+              onClick={goToRuns}
+            >
+              <span className="text-3xl"></span>
+              <span className="text-gray-300 hover:text-white transition">
+                Runs
+              </span>
             </div>
-            <div className="flex items-center gap-2">
-              <span className="text-3xl">🏋️</span>
-              <span className="text-gray-300 cursor-pointer" onClick={goToLifts}>Strength</span>
+            <div
+              className="flex items-center gap-2 cursor-pointer"
+              onClick={goToLifts}
+            >
+              <span className="text-3xl"></span>
+              <span className="text-gray-300 hover:text-white transition">
+                Strength
+              </span>
             </div>
-            <div className="flex items-center gap-2">
-              <span className="text-3xl">🍎</span>
-              <span className="text-gray-300 cursor-pointer" onClick={goToMeals}>Meals</span>
+            <div
+              className="flex items-center gap-2 cursor-pointer"
+              onClick={goToMeals}
+            >
+              <span className="text-3xl"></span>
+              <span className="text-gray-300 hover:text-white transition">
+                Meals
+              </span>
             </div>
           </div>
         </div>
@@ -68,23 +80,29 @@ const LandingPage = () => {
         </div>
       </div>
 
-      {/* Optional Features Section */}
+      {/* Features Section */}
       <section className="max-w-7xl mx-auto px-6 py-20 grid grid-cols-1 md:grid-cols-3 gap-12">
         <div className="bg-gray-900 rounded-2xl p-8 border border-gray-800 text-center">
           <h3 className="text-2xl font-semibold mb-2">Run Tracker</h3>
-          <p className="text-gray-400">Track your runs with distance, pace, and duration.</p>
+          <p className="text-gray-400">
+            Track your runs with distance, pace, and duration.
+          </p>
         </div>
         <div className="bg-gray-900 rounded-2xl p-8 border border-gray-800 text-center">
           <h3 className="text-2xl font-semibold mb-2">Strength Training</h3>
-          <p className="text-gray-400">Log lifts and track your progress over time.</p>
+          <p className="text-gray-400">
+            Log lifts and track your progress over time.
+          </p>
         </div>
         <div className="bg-gray-900 rounded-2xl p-8 border border-gray-800 text-center">
           <h3 className="text-2xl font-semibold mb-2">Meal Plans</h3>
-          <p className="text-gray-400">Plan and track meals for optimal nutrition.</p>
+          <p className="text-gray-400">
+            Plan and track meals for optimal nutrition.
+          </p>
         </div>
       </section>
     </div>
   );
-};
+}
 
 export default LandingPage;
