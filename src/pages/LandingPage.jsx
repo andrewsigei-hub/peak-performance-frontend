@@ -80,7 +80,7 @@ function LandingPage() {
           {/* Track Runs Card */}
           <div className="bg-gray-900 rounded-2xl p-6 border border-gray-800 hover:border-yellow-400 transition">
             <div className="flex items-start gap-4">
-              <Activity className="text-yellow-400 flex-shrink-0" size={40} />
+              <Activity className="text-yellow-400 shrink-0" size={40} />
               <div>
                 <h3 className="text-xl font-bold mb-2">Track Runs</h3>
                 <p className="text-gray-400">
@@ -94,7 +94,7 @@ function LandingPage() {
           {/* Log Workouts Card */}
           <div className="bg-gray-900 rounded-2xl p-6 border border-gray-800 hover:border-yellow-400 transition">
             <div className="flex items-start gap-4">
-              <Dumbbell className="text-yellow-400 flex-shrink-0" size={40} />
+              <Dumbbell className="text-yellow-400 shrink-0" size={40} />
               <div>
                 <h3 className="text-xl font-bold mb-2">Log Workouts</h3>
                 <p className="text-gray-400">
