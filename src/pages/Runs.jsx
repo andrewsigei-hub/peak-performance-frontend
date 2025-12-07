@@ -1,6 +1,6 @@
 import { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
-import { Star } from "lucide-react";
+import { Star, Trash2 } from "lucide-react";
 import Navbar from "../components/Navbar";
 
 function Runs() {
@@ -77,17 +77,6 @@ function Runs() {
       }),
     }).then(function () {
       // Update the list to show new star status
-      fetchRuns(user.id);
-    });
-  }
-
-  // Delete run
-  function handleDeleteRun(runId) {
-    fetch(`http://localhost:8000/workouts/${runId}`, {
-      method: "DELETE",
-    }).then(function () {
-      console.log("Run deleted:", runId);
-      // Refresh list
       fetchRuns(user.id);
     });
   }
