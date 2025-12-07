@@ -1,7 +1,8 @@
 @import "tailwindcss";
 
 @theme {
-  --color-peak-yellow: #F4D03F;
-  --color-peak-dark: #0F0F0F;
-  --color-peak-card: #1A1A1A;
+  --color-peak-yellow: #f4d03f;
+  --color-peak-dark: #0f0f0f;
+  --color-peak-card: #1a1a1a;
+  --font-family-sans: "Inter", system-ui, sans-serif;
 }
