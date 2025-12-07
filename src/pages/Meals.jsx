@@ -1,6 +1,5 @@
 import { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
-import { Star } from 'lucide-react';
 import Navbar from '../components/Navbar';
 
 function Meals() {
@@ -9,7 +8,7 @@ function Meals() {
   const [showForm, setShowForm] = useState(false);
   const navigate = useNavigate();
 
-  // Form fields
+  // Form inputs
   const [mealName, setMealName] = useState('');
   const [calories, setCalories] = useState('');
   const [protein, setProtein] = useState('');
@@ -17,7 +16,55 @@ function Meals() {
   const [fat, setFat] = useState('');
   const [date, setDate] = useState('');
 
-  // Check if user is logged in
+  // Get all meals from backend
+  function fetchMeals(userId) {
+    fetch(`http://localhost:8000/meals?user_id=${userId}`)
+      .then(function(response) {
+        return response.json();
+      })
+      .then(function(data) {
+        setMeals(data);
+      });
+  }
+
+  // Add new meal
+  function handleAddMeal(event) {
+    event.preventDefault();
+    
+    const newMeal = {
+      user_id: user.id,
+      name: mealName,
+      calories: parseInt(calories),
+      protein: parseFloat(protein),
+      carbs: parseFloat(carbs),
+      fat: parseFloat(fat),
+      date: date
+    };
+
+    fetch('http://localhost:8000/meals', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify(newMeal)
+    })
+      .then(function(response) {
+        return response.json();
+      })
+      .then(function(data) {
+        console.log('Meal added:', data);
+        // Clear form
+        setMealName('');
+        setCalories('');
+        setProtein('');
+        setCarbs('');
+        setFat('');
+        setDate('');
+        setShowForm(false);
+        // Refresh list
+        fetchMeals(user.id);
+      });
+  }
+
+  // Check if logged in on page load
   useEffect(function() {
     const storedUser = localStorage.getItem('user');
     if (!storedUser) {
@@ -29,52 +76,6 @@ function Meals() {
     fetchMeals(userData.id);
   }, [navigate]);
 
-  // Fetch all meals from backend
-  async function fetchMeals(userId) {
-    try {
-      const response = await fetch(`http://localhost:8000/meals?user_id=${userId}`);
-      const mealsData = await response.json();
-      setMeals(mealsData);
-    } catch (error) {
-      console.error('Error fetching meals:', error);
-    }
-  }
-
-  // Add new meal to backend
-  async function handleAddMeal(event) {
-    event.preventDefault();
-    
-    try {
-      await fetch('http://localhost:8000/meals', {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({
-          user_id: user.id,
-          name: mealName,
-          calories: parseInt(calories),
-          protein: parseFloat(protein),
-          carbs: parseFloat(carbs),
-          fat: parseFloat(fat),
-          date: date
-        })
-      });
-      
-      // Reset form
-      setMealName('');
-      setCalories('');
-      setProtein('');
-      setCarbs('');
-      setFat('');
-      setDate('');
-      setShowForm(false);
-      
-      // Refresh data
-      fetchMeals(user.id);
-    } catch (error) {
-      console.error('Error adding meal:', error);
-    }
-  }
-
   if (!user) return null;
 
   return (
@@ -83,7 +84,7 @@ function Meals() {
       
       <div className="max-w-7xl mx-auto px-6 py-8">
         
-        {/* Header */}
+        {/* Page header */}
         <div className="flex justify-between items-center mb-8">
           <h1 className="text-4xl font-bold">Nutrition Tracker</h1>
           <button
@@ -94,7 +95,7 @@ function Meals() {
           </button>
         </div>
 
-        {/* Add Meal Form */}
+        {/* Form to add meal */}
         {showForm && (
           <form onSubmit={handleAddMeal} className="bg-gray-900 p-6 rounded-xl border border-gray-800 mb-8">
             <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
@@ -172,7 +173,7 @@ function Meals() {
           </form>
         )}
 
-        {/* Meals Grid */}
+        {/* Display meals */}
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
           {meals.length === 0 ? (
             <div className="col-span-full bg-gray-900 p-8 rounded-xl border border-gray-800 text-center text-gray-400">
@@ -188,7 +189,7 @@ function Meals() {
                   {/* Date */}
                   <div className="text-sm text-gray-400 mb-3">{meal.date}</div>
 
-                  {/* Meal Name */}
+                  {/* Meal name */}
                   <div className="text-xl font-bold mb-1">{meal.name}</div>
 
                   {/* Calories */}
@@ -196,7 +197,7 @@ function Meals() {
                     {meal.calories} cal
                   </div>
 
-                  {/* Macros */}
+                  {/* Macros breakdown */}
                   <div className="bg-gray-950 p-3 rounded-lg">
                     <div className="grid grid-cols-3 gap-2 text-sm">
                       <div>

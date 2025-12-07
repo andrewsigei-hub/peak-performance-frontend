@@ -9,14 +9,143 @@ function Lifts() {
   const [showForm, setShowForm] = useState(false);
   const navigate = useNavigate();
 
-  // Form fields
+  // Form inputs
   const [duration, setDuration] = useState("");
   const [date, setDate] = useState("");
   const [exercises, setExercises] = useState([
     { name: "", sets: "", reps: "", weight: "" },
   ]);
 
-  // Check if user is logged in
+  // Get all strength workouts with their exercises
+  function fetchLifts(userId) {
+    fetch(`http://localhost:8000/workouts?user_id=${userId}`)
+      .then(function (response) {
+        return response.json();
+      })
+      .then(function (data) {
+        // Filter for strength workouts
+        const strengthWorkouts = data.filter(function (workout) {
+          const workoutType = workout.type.toLowerCase();
+          return (
+            workoutType === "strength" ||
+            workoutType === "lifting" ||
+            workoutType === "weights"
+          );
+        });
+
+        // Get exercises for each workout
+        const promises = strengthWorkouts.map(function (workout) {
+          return fetch(
+            `http://localhost:8000/exercises?workout_id=${workout.id}`
+          )
+            .then(function (response) {
+              return response.json();
+            })
+            .then(function (exercisesData) {
+              workout.exercises = exercisesData;
+              return workout;
+            });
+        });
+
+        // Wait for all exercises to load
+        Promise.all(promises).then(function (workoutsWithExercises) {
+          setWorkouts(workoutsWithExercises);
+          console.log("Loaded workouts with exercises:", workoutsWithExercises);
+        });
+      });
+  }
+
+  // Add another exercise input to the form
+  function addExerciseField() {
+    const newExercise = { name: "", sets: "", reps: "", weight: "" };
+    setExercises([...exercises, newExercise]);
+  }
+
+  // Update a specific exercise field
+  function updateExercise(index, field, value) {
+    const updatedExercises = [...exercises];
+    updatedExercises[index][field] = value;
+    setExercises(updatedExercises);
+  }
+
+  // Save workout with all exercises
+  function handleAddWorkout(event) {
+    event.preventDefault();
+
+    const newWorkout = {
+      user_id: user.id,
+      type: "Strength",
+      duration_min: parseInt(duration),
+      date: date,
+      is_starred: false,
+    };
+
+    // First create the workout
+    fetch("http://localhost:8000/workouts", {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify(newWorkout),
+    })
+      .then(function (response) {
+        return response.json();
+      })
+      .then(function (workout) {
+        console.log("Workout created:", workout);
+
+        // Then add each exercise to this workout
+        const exercisePromises = [];
+        for (let i = 0; i < exercises.length; i++) {
+          const exercise = exercises[i];
+          if (
+            exercise.name &&
+            exercise.sets &&
+            exercise.reps &&
+            exercise.weight
+          ) {
+            const exerciseData = {
+              workout_id: workout.id,
+              name: exercise.name,
+              sets: parseInt(exercise.sets),
+              reps: parseInt(exercise.reps),
+              weight: parseFloat(exercise.weight),
+            };
+
+            const promise = fetch("http://localhost:8000/exercises", {
+              method: "POST",
+              headers: { "Content-Type": "application/json" },
+              body: JSON.stringify(exerciseData),
+            });
+            exercisePromises.push(promise);
+          }
+        }
+
+        // Wait for all exercises to be added
+        return Promise.all(exercisePromises);
+      })
+      .then(function () {
+        // Clear form and refresh
+        setDuration("");
+        setDate("");
+        setExercises([{ name: "", sets: "", reps: "", weight: "" }]);
+        setShowForm(false);
+        fetchLifts(user.id);
+      });
+  }
+
+  // Toggle star
+  function toggleStar(workoutId, currentStarred) {
+    fetch(`http://localhost:8000/workouts/${workoutId}`, {
+      method: "PATCH",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({
+        is_starred: !currentStarred,
+      }),
+    }).then(function () {
+      fetchLifts(user.id);
+    });
+  }
+
+  // Check login on page load
   useEffect(
     function () {
       const storedUser = localStorage.getItem("user");
@@ -31,125 +160,6 @@ function Lifts() {
     [navigate]
   );
 
-  // Fetch all strength workouts from backend
-  async function fetchLifts(userId) {
-    try {
-      const response = await fetch(
-        `http://localhost:8000/workouts?user_id=${userId}`
-      );
-      const workoutsData = await response.json();
-
-      // Filter for strength workouts
-      const liftWorkouts = workoutsData.filter(function (workout) {
-        return (
-          workout.type.toLowerCase() === "strength" ||
-          workout.type.toLowerCase() === "lifting" ||
-          workout.type.toLowerCase() === "weights"
-        );
-      });
-
-      // Fetch exercises for each workout
-      const workoutsWithExercises = await Promise.all(
-        liftWorkouts.map(async function (workout) {
-          const exercisesResponse = await fetch(
-            `http://localhost:8000/exercises?workout_id=${workout.id}`
-          );
-          const exercisesData = await exercisesResponse.json();
-          return { ...workout, exercises: exercisesData };
-        })
-      );
-
-      setWorkouts(workoutsWithExercises);
-    } catch (error) {
-      console.error("Error fetching lifts:", error);
-    }
-  }
-
-  // Add another exercise field to form
-  function addExerciseField() {
-    setExercises([...exercises, { name: "", sets: "", reps: "", weight: "" }]);
-  }
-
-  // Update exercise field
-  function updateExercise(index, field, value) {
-    const updatedExercises = [...exercises];
-    updatedExercises[index][field] = value;
-    setExercises(updatedExercises);
-  }
-
-  // Add new workout to backend
-  async function handleAddWorkout(event) {
-    event.preventDefault();
-
-    try {
-      // Create workout
-      const workoutResponse = await fetch("http://localhost:8000/workouts", {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({
-          user_id: user.id,
-          type: "Strength",
-          duration_min: parseInt(duration),
-          date: date,
-          is_starred: false,
-        }),
-      });
-
-      const newWorkout = await workoutResponse.json();
-
-      // Add each exercise to the workout
-      for (const exercise of exercises) {
-        if (
-          exercise.name &&
-          exercise.sets &&
-          exercise.reps &&
-          exercise.weight
-        ) {
-          await fetch("http://localhost:8000/exercises", {
-            method: "POST",
-            headers: { "Content-Type": "application/json" },
-            body: JSON.stringify({
-              workout_id: newWorkout.id,
-              name: exercise.name,
-              sets: parseInt(exercise.sets),
-              reps: parseInt(exercise.reps),
-              weight: parseFloat(exercise.weight),
-            }),
-          });
-        }
-      }
-
-      // Reset form
-      setDuration("");
-      setDate("");
-      setExercises([{ name: "", sets: "", reps: "", weight: "" }]);
-      setShowForm(false);
-
-      // Refresh data
-      fetchLifts(user.id);
-    } catch (error) {
-      console.error("Error adding workout:", error);
-    }
-  }
-
-  // Toggle star on a workout
-  async function toggleStar(workoutId, currentStarred) {
-    try {
-      await fetch(`http://localhost:8000/workouts/${workoutId}`, {
-        method: "PATCH",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({
-          is_starred: !currentStarred,
-        }),
-      });
-
-      // Refresh data to show updated star
-      fetchLifts(user.id);
-    } catch (error) {
-      console.error("Error toggling star:", error);
-    }
-  }
-
   if (!user) return null;
 
   return (
@@ -157,7 +167,7 @@ function Lifts() {
       <Navbar />
 
       <div className="max-w-7xl mx-auto px-6 py-8">
-        {/* Header */}
+        {/* Page header */}
         <div className="flex justify-between items-center mb-8">
           <h1 className="text-4xl font-bold">Strength Training</h1>
           <button
@@ -170,7 +180,7 @@ function Lifts() {
           </button>
         </div>
 
-        {/* Add Workout Form */}
+        {/* Form to add workout */}
         {showForm && (
           <form
             onSubmit={handleAddWorkout}
@@ -205,7 +215,7 @@ function Lifts() {
               </div>
             </div>
 
-            {/* Exercises Section */}
+            {/* Exercise inputs */}
             <div className="mb-4">
               <label className="block text-sm text-gray-400 mb-2">
                 Exercises
@@ -215,7 +225,7 @@ function Lifts() {
                   <div key={index} className="grid grid-cols-4 gap-2 mb-2">
                     <input
                       type="text"
-                      placeholder="Exercise name"
+                      placeholder="Exercise"
                       value={exercise.name}
                       onChange={function (event) {
                         updateExercise(index, "name", event.target.value);
@@ -271,7 +281,7 @@ function Lifts() {
           </form>
         )}
 
-        {/* Workouts Grid */}
+        {/* Display workouts */}
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
           {workouts.length === 0 ? (
             <div className="col-span-full bg-gray-900 p-8 rounded-xl border border-gray-800 text-center text-gray-400">
@@ -284,7 +294,7 @@ function Lifts() {
                   key={workout.id}
                   className="bg-gray-900 p-6 rounded-xl border border-gray-800 hover:border-yellow-400 transition"
                 >
-                  {/* Star and Date */}
+                  {/* Top row */}
                   <div className="flex justify-between items-start mb-3">
                     <div className="text-sm text-gray-400">{workout.date}</div>
                     <button
@@ -309,7 +319,7 @@ function Lifts() {
                     {workout.duration_min} min
                   </div>
 
-                  {/* Exercises List */}
+                  {/* List of exercises */}
                   {workout.exercises && workout.exercises.length > 0 && (
                     <div className="space-y-2">
                       {workout.exercises.map(function (exercise) {
