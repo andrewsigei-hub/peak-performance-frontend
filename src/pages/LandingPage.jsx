@@ -5,7 +5,7 @@ function LandingPage() {
   const navigate = useNavigate();
 
   function goToLogin() {
-    navigate("/login");
+    navigate("/Login");
   }
 
   function goToMeals() {
@@ -24,7 +24,6 @@ function LandingPage() {
     <div className="bg-gray-950 text-white min-h-screen">
       {/* Hero Section */}
       <div className="max-w-7xl mx-auto px-6 py-20 grid grid-cols-1 lg:grid-cols-2 gap-12 items-center">
-        
         {/* Left Side - Hero Text */}
         <div>
           <h1 className="text-6xl font-bold mb-6 leading-tight">
@@ -46,24 +45,38 @@ function LandingPage() {
 
           {/* Feature Icons */}
           <div className="flex flex-wrap gap-8 mt-6">
-            <div className="flex items-center gap-2 cursor-pointer" onClick={goToRuns}>
+            <div
+              className="flex items-center gap-2 cursor-pointer"
+              onClick={goToRuns}
+            >
               <Activity className="text-yellow-400" size={32} />
-              <span className="text-gray-300 hover:text-white transition">Runs</span>
+              <span className="text-gray-300 hover:text-white transition">
+                Runs
+              </span>
             </div>
-            <div className="flex items-center gap-2 cursor-pointer" onClick={goToLifts}>
+            <div
+              className="flex items-center gap-2 cursor-pointer"
+              onClick={goToLifts}
+            >
               <Dumbbell className="text-yellow-400" size={32} />
-              <span className="text-gray-300 hover:text-white transition">Strength</span>
+              <span className="text-gray-300 hover:text-white transition">
+                Strength
+              </span>
             </div>
-            <div className="flex items-center gap-2 cursor-pointer" onClick={goToMeals}>
+            <div
+              className="flex items-center gap-2 cursor-pointer"
+              onClick={goToMeals}
+            >
               <Apple className="text-yellow-400" size={32} />
-              <span className="text-gray-300 hover:text-white transition">Meals</span>
+              <span className="text-gray-300 hover:text-white transition">
+                Meals
+              </span>
             </div>
           </div>
         </div>
 
         {/* Right Side - Feature Cards Stack */}
         <div className="space-y-4">
-          
           {/* Track Runs Card */}
           <div className="bg-gray-900 rounded-2xl p-6 border border-gray-800 hover:border-yellow-400 transition">
             <div className="flex items-start gap-4">
@@ -71,7 +84,8 @@ function LandingPage() {
               <div>
                 <h3 className="text-xl font-bold mb-2">Track Runs</h3>
                 <p className="text-gray-400">
-                  Log your running distance, duration, and pace. Monitor your progress over time.
+                  Log your running distance, duration, and pace. Monitor your
+                  progress over time.
                 </p>
               </div>
             </div>
@@ -84,7 +98,8 @@ function LandingPage() {
               <div>
                 <h3 className="text-xl font-bold mb-2">Log Workouts</h3>
                 <p className="text-gray-400">
-                  Record your strength training sessions with sets, reps, and weights for each exercise.
+                  Record your strength training sessions with sets, reps, and
+                  weights for each exercise.
                 </p>
               </div>
             </div>
@@ -93,18 +108,17 @@ function LandingPage() {
           {/* Track Meals Card */}
           <div className="bg-gray-900 rounded-2xl p-6 border border-gray-800 hover:border-yellow-400 transition">
             <div className="flex items-start gap-4">
-              <Apple className="text-yellow-400 flex-shrink-0" size={40} />
+              <Apple className="text-yellow-400 shrink-0" size={40} />
               <div>
                 <h3 className="text-xl font-bold mb-2">Track Meals</h3>
                 <p className="text-gray-400">
-                  Monitor your nutrition by logging calories, protein, carbs, and fats for every meal.
+                  Monitor your nutrition by logging calories, protein, carbs,
+                  and fats for every meal.
                 </p>
               </div>
             </div>
           </div>
-
         </div>
-
       </div>
 
       {/* Features Section */}
@@ -114,21 +128,27 @@ function LandingPage() {
             <Activity className="text-yellow-400" size={48} />
           </div>
           <h3 className="text-2xl font-semibold mb-2">Run Tracker</h3>
-          <p className="text-gray-400">Track your runs with distance, pace, and duration.</p>
+          <p className="text-gray-400">
+            Track your runs with distance, pace, and duration.
+          </p>
         </div>
         <div className="bg-gray-900 rounded-2xl p-8 border border-gray-800 text-center">
           <div className="flex justify-center mb-4">
             <Dumbbell className="text-yellow-400" size={48} />
           </div>
           <h3 className="text-2xl font-semibold mb-2">Strength Training</h3>
-          <p className="text-gray-400">Log lifts and track your progress over time.</p>
+          <p className="text-gray-400">
+            Log lifts and track your progress over time.
+          </p>
         </div>
         <div className="bg-gray-900 rounded-2xl p-8 border border-gray-800 text-center">
           <div className="flex justify-center mb-4">
             <Apple className="text-yellow-400" size={48} />
           </div>
           <h3 className="text-2xl font-semibold mb-2">Meal Plans</h3>
-          <p className="text-gray-400">Plan and track meals for optimal nutrition.</p>
+          <p className="text-gray-400">
+            Plan and track meals for optimal nutrition.
+          </p>
         </div>
       </section>
     </div>
