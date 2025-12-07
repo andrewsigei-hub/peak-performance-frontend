@@ -84,7 +84,8 @@ function Dashboard() {
         <div className="mb-8">
           <h1 className="text-4xl font-bold mb-2">Hey {user.name}! </h1>
           <p className="text-gray-400 text-lg">
-            You've logged {workouts.length} workouts so far
+            You've logged {workouts.length} workouts so far and logged{" "}
+            {meals.length} meal.
           </p>
         </div>
 
