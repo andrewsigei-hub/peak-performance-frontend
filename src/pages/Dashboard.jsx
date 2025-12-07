@@ -209,7 +209,7 @@ function Dashboard() {
                             {meal.calories} cal
                           </div>
                           <div className="text-xs text-gray-400">
-                            P: {meal.protein}g · C: {meal.carbs}g · F:{" "}
+                            Proteins: {meal.protein}g · Carbs: {meal.carbs}g · Fats:{" "}
                             {meal.fat}g
                           </div>
                         </div>

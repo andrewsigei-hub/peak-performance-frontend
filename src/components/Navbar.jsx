@@ -1,66 +1,112 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 
-export default function Navbar() {
+function Navbar() {
   const [isOpen, setIsOpen] = useState(false);
+  const [user, setUser] = useState(null); // Track logged in user
   const navigate = useNavigate();
 
-  const toggleMenu = () => setIsOpen(!isOpen);
+  // Check if user is logged in when component loads
+  useEffect(function () {
+    const storedUser = localStorage.getItem("user");
+    if (storedUser) {
+      setUser(JSON.parse(storedUser));
+    }
+  }, []);
 
-  const scrollToSection = (id) => {
-    const section = document.getElementById(id);
-    if (section) section.scrollIntoView({ behavior: "smooth" });
-  };
+  function toggleMenu() {
+    setIsOpen(!isOpen);
+  }
 
   // Navigation handlers
-  const goToDashboard = () => navigate("/dashboard");
-  const goToLogin = () => navigate("/login");
-  const goToMeals = () => navigate("/meals");
-  const goToProgress = () => navigate("/progress"); // You added this page
-  const goToLifts = () => navigate("/lifts");
-  const goToRuns = () => navigate("/runs");
+  function goToHome() {
+    navigate("/");
+  }
+
+  function goToDashboard() {
+    navigate("/dashboard");
+  }
+
+  function goToLogin() {
+    navigate("/login");
+  }
+
+  function goToMeals() {
+    navigate("/meals");
+  }
+
+  function goToProgress() {
+    navigate("/progress");
+  }
+
+  function goToLifts() {
+    navigate("/lifts");
+  }
+
+  function goToRuns() {
+    navigate("/runs");
+  }
+
+  // Handle logout
+  function handleLogout() {
+    localStorage.removeItem("user");
+    setUser(null);
+    navigate("/");
+  }
 
   // Shared nav items for both desktop + mobile
   const navItems = [
     { label: "Meals", action: goToMeals },
     { label: "Lifts", action: goToLifts },
     { label: "Runs", action: goToRuns },
-    { label: "Progress", action: goToProgress }, // NEW PAGE
+    { label: "Progress", action: goToProgress },
     { label: "Dashboard", action: goToDashboard },
   ];
 
   return (
     <nav className="bg-gray-950 border-b border-gray-800 text-white">
       <div className="max-w-7xl mx-auto px-6 py-4 flex items-center justify-between">
-        {/* Logo */}
-        <div
-          className="flex items-center gap-2 cursor-pointer"
-          onClick={() => window.scrollTo({ top: 0, behavior: "smooth" })}
+        {/* Logo - Clickable to go home */}
+        <h1
+          className="text-2xl font-bold text-yellow-400 hover:text-yellow-500 transition cursor-pointer"
+          onClick={goToHome}
         >
-          <div className="w-8 h-8 bg-yellow-400 rounded transform rotate-45"></div>
-          <span className="text-2xl font-bold text-yellow-400">
-            PeakPerform
-          </span>
-        </div>
+          PeakPerform
+        </h1>
 
         {/* Desktop Menu */}
         <div className="hidden md:flex items-center gap-6">
-          {navItems.map((item) => (
-            <button
-              key={item.label}
-              onClick={item.action}
-              className="text-gray-300 hover:text-white transition-colors"
-            >
-              {item.label}
-            </button>
-          ))}
+          {navItems.map(function (item) {
+            return (
+              <button
+                key={item.label}
+                onClick={item.action}
+                className="text-gray-300 hover:text-white transition-colors"
+              >
+                {item.label}
+              </button>
+            );
+          })}
 
-          <button
-            onClick={goToLogin}
-            className="bg-yellow-400 text-black px-6 py-2 rounded-lg font-semibold hover:bg-yellow-500 transition-colors"
-          >
-            Sign In
-          </button>
+          {/* Show Logout if user is logged in, otherwise Sign In */}
+          {user ? (
+            <div className="flex items-center gap-4">
+              <span className="text-gray-300">Hi, {user.name}</span>
+              <button
+                onClick={handleLogout}
+                className="bg-gray-800 text-white px-6 py-2 rounded-lg font-semibold hover:bg-gray-700 transition-colors"
+              >
+                Logout
+              </button>
+            </div>
+          ) : (
+            <button
+              onClick={goToLogin}
+              className="bg-yellow-400 text-black px-6 py-2 rounded-lg font-semibold hover:bg-yellow-500 transition-colors"
+            >
+              Sign In
+            </button>
+          )}
         </div>
 
         {/* Mobile Hamburger */}
@@ -107,30 +153,50 @@ export default function Navbar() {
       {/* Mobile Menu */}
       {isOpen && (
         <div className="md:hidden px-6 pb-4 flex flex-col gap-3">
-          {navItems.map((item) => (
+          {navItems.map(function (item) {
+            return (
+              <button
+                key={item.label}
+                onClick={function () {
+                  item.action();
+                  setIsOpen(false);
+                }}
+                className="text-gray-300 hover:text-white transition-colors text-left"
+              >
+                {item.label}
+              </button>
+            );
+          })}
+
+          {/* Show Logout if user is logged in, otherwise Sign In */}
+          {user ? (
+            <>
+              <span className="text-gray-300">Hi, {user.name}</span>
+              <button
+                onClick={function () {
+                  handleLogout();
+                  setIsOpen(false);
+                }}
+                className="bg-gray-800 text-white px-6 py-2 rounded-lg font-semibold hover:bg-gray-700 transition-colors"
+              >
+                Logout
+              </button>
+            </>
+          ) : (
             <button
-              key={item.label}
-              onClick={() => {
-                item.action();
+              onClick={function () {
+                goToLogin();
                 setIsOpen(false);
               }}
-              className="text-gray-300 hover:text-white transition-colors text-left"
+              className="bg-yellow-400 text-black px-6 py-2 rounded-lg font-semibold hover:bg-yellow-500 transition-colors"
             >
-              {item.label}
+              Sign In
             </button>
-          ))}
-
-          <button
-            onClick={() => {
-              goToLogin();
-              setIsOpen(false);
-            }}
-            className="bg-yellow-400 text-black px-6 py-2 rounded-lg font-semibold hover:bg-yellow-500 transition-colors"
-          >
-            Sign In
-          </button>
+          )}
         </div>
       )}
     </nav>
   );
 }
+
+export default Navbar;
