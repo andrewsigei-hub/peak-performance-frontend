@@ -1,5 +1,6 @@
 import { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
+import { Trash2 } from "lucide-react";
 import Navbar from "../components/Navbar";
 
 function Meals() {
@@ -64,15 +65,16 @@ function Meals() {
       });
   }
 
-  // Delete meal
-  function handleDeleteMeal(mealId) {
-    fetch(`http://localhost:8000/meals/${mealId}`, {
-      method: "DELETE",
-    }).then(function () {
-      console.log("Meal deleted:", mealId);
-      // Refresh list
-      fetchMeals(user.id);
-    });
+  // Delete a meal
+  function deleteMeal(mealId) {
+    if (window.confirm("Are you sure you want to delete this meal?")) {
+      fetch(`http://localhost:8000/meals/${mealId}`, {
+        method: "DELETE",
+      }).then(function () {
+        console.log("Meal deleted");
+        fetchMeals(user.id);
+      });
+    }
   }
 
   // Check if logged in on page load
@@ -226,8 +228,18 @@ function Meals() {
                   key={meal.id}
                   className="bg-gray-900 p-6 rounded-xl border border-gray-800 hover:border-yellow-400 transition"
                 >
-                  {/* Date */}
-                  <div className="text-sm text-gray-400 mb-3">{meal.date}</div>
+                  {/* Date and Delete Button */}
+                  <div className="flex justify-between items-start mb-3">
+                    <div className="text-sm text-gray-400">{meal.date}</div>
+                    <button
+                      onClick={function () {
+                        deleteMeal(meal.id);
+                      }}
+                      className="hover:scale-110 transition text-red-400 hover:text-red-500"
+                    >
+                      <Trash2 size={20} />
+                    </button>
+                  </div>
 
                   {/* Meal name */}
                   <div className="text-xl font-bold mb-1">{meal.name}</div>
