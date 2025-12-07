@@ -10,7 +10,7 @@ function Navbar() {
   useEffect(function () {
     const storedUser = localStorage.getItem("user");
     if (storedUser) {
-      setUser(JSON.parse(storedUser));
+      setUser(JSON.parse(storedUser)); // Not really and issue? Because i have a dependancy array so it only runs once
     }
   }, []);
 

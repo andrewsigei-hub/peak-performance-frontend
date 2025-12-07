@@ -9,13 +9,80 @@ function Runs() {
   const [showForm, setShowForm] = useState(false);
   const navigate = useNavigate();
 
-  // Form fields
+  // Form inputs
   const [duration, setDuration] = useState('');
   const [distance, setDistance] = useState('');
   const [pace, setPace] = useState('');
   const [date, setDate] = useState('');
 
-  // Check if user is logged in
+  // Get all runs from backend
+  function fetchRuns(userId) {
+    fetch(`http://localhost:8000/workouts?user_id=${userId}`)
+      .then(function(response) {
+        return response.json();
+      })
+      .then(function(data) {
+        // Filter to only show running workouts
+        const runningWorkouts = data.filter(function(workout) {
+          const workoutType = workout.type.toLowerCase();
+          return workoutType === 'running' || workoutType === 'run';
+        });
+        setRuns(runningWorkouts);
+        console.log('Found runs:', runningWorkouts);
+      });
+  }
+
+  // Add a new run
+  function handleAddRun(event) {
+    event.preventDefault();
+    
+    const newRun = {
+      user_id: user.id,
+      type: 'Running',
+      duration_min: parseInt(duration),
+      distance_km: parseFloat(distance),
+      avg_pace: pace ? parseFloat(pace) : null,
+      date: date,
+      is_starred: false
+    };
+
+    fetch('http://localhost:8000/workouts', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify(newRun)
+    })
+      .then(function(response) {
+        return response.json();
+      })
+      .then(function(data) {
+        console.log('Run added:', data);
+        // Clear form
+        setDuration('');
+        setDistance('');
+        setPace('');
+        setDate('');
+        setShowForm(false);
+        // Refresh the list
+        fetchRuns(user.id);
+      });
+  }
+
+  // Toggle star on/off
+  function toggleStar(runId, currentStarred) {
+    fetch(`http://localhost:8000/workouts/${runId}`, {
+      method: 'PATCH',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({
+        is_starred: !currentStarred
+      })
+    })
+      .then(function() {
+        // Update the list to show new star status
+        fetchRuns(user.id);
+      });
+  }
+
+  // Check if user is logged in when page loads
   useEffect(function() {
     const storedUser = localStorage.getItem('user');
     if (!storedUser) {
@@ -27,74 +94,6 @@ function Runs() {
     fetchRuns(userData.id);
   }, [navigate]);
 
-  // Fetch all running workouts from backend
-  async function fetchRuns(userId) {
-    try {
-      const response = await fetch(`http://localhost:8000/workouts?user_id=${userId}`);
-      const workoutsData = await response.json();
-      
-      // Filter for running workouts only
-      const runningWorkouts = workoutsData.filter(function(workout) {
-        return workout.type.toLowerCase() === 'running' || workout.type.toLowerCase() === 'run';
-      });
-      
-      setRuns(runningWorkouts);
-    } catch (error) {
-      console.error('Error fetching runs:', error);
-    }
-  }
-
-  // Add new run to backend
-  async function handleAddRun(event) {
-    event.preventDefault();
-    
-    try {
-      await fetch('http://localhost:8000/workouts', {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({
-          user_id: user.id,
-          type: 'Running',
-          duration_min: parseInt(duration),
-          distance_km: parseFloat(distance),
-          avg_pace: pace ? parseFloat(pace) : null,
-          date: date,
-          is_starred: false
-        })
-      });
-      
-      // Reset form
-      setDuration('');
-      setDistance('');
-      setPace('');
-      setDate('');
-      setShowForm(false);
-      
-      // Refresh data
-      fetchRuns(user.id);
-    } catch (error) {
-      console.error('Error adding run:', error);
-    }
-  }
-
-  // Toggle star on a run
-  async function toggleStar(runId, currentStarred) {
-    try {
-      await fetch(`http://localhost:8000/workouts/${runId}`, {
-        method: 'PATCH',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({
-          is_starred: !currentStarred
-        })
-      });
-      
-      // Refresh data to show updated star
-      fetchRuns(user.id);
-    } catch (error) {
-      console.error('Error toggling star:', error);
-    }
-  }
-
   if (!user) return null;
 
   return (
@@ -103,7 +102,7 @@ function Runs() {
       
       <div className="max-w-7xl mx-auto px-6 py-8">
         
-        {/* Header */}
+        {/* Page header */}
         <div className="flex justify-between items-center mb-8">
           <h1 className="text-4xl font-bold">Running Tracker</h1>
           <button
@@ -114,7 +113,7 @@ function Runs() {
           </button>
         </div>
 
-        {/* Add Run Form */}
+        {/* Form to add new run */}
         {showForm && (
           <form onSubmit={handleAddRun} className="bg-gray-900 p-6 rounded-xl border border-gray-800 mb-8">
             <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
@@ -169,7 +168,7 @@ function Runs() {
           </form>
         )}
 
-        {/* Runs Grid */}
+        {/* Display all runs in cards */}
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
           {runs.length === 0 ? (
             <div className="col-span-full bg-gray-900 p-8 rounded-xl border border-gray-800 text-center text-gray-400">
@@ -182,7 +181,7 @@ function Runs() {
                   key={run.id} 
                   className="bg-gray-900 p-6 rounded-xl border border-gray-800 hover:border-yellow-400 transition"
                 >
-                  {/* Star and Date */}
+                  {/* Top row with date and star */}
                   <div className="flex justify-between items-start mb-3">
                     <div className="text-sm text-gray-400">{run.date}</div>
                     <button
@@ -196,7 +195,7 @@ function Runs() {
                     </button>
                   </div>
 
-                  {/* Distance */}
+                  {/* Main distance display */}
                   <div className="text-3xl font-bold text-yellow-400 mb-1">
                     {run.distance_km} km
                   </div>
@@ -206,7 +205,7 @@ function Runs() {
                     {run.duration_min} minutes
                   </div>
 
-                  {/* Pace */}
+                  {/* Pace if available */}
                   {run.avg_pace && (
                     <div className="text-sm text-gray-400">
                       Pace: {run.avg_pace} min/km
