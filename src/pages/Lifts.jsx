@@ -281,7 +281,7 @@ function Lifts() {
           </form>
         )}
 
-        {/* Display workouts */}
+        // Display workouts 
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
           {workouts.length === 0 ? (
             <div className="col-span-full bg-gray-900 p-8 rounded-xl border border-gray-800 text-center text-gray-400">
@@ -314,12 +314,12 @@ function Lifts() {
                     </button>
                   </div>
 
-                  {/* Duration */}
+                  // Duration 
                   <div className="text-3xl font-bold text-yellow-400 mb-3">
                     {workout.duration_min} min
                   </div>
 
-                  {/* List of exercises */}
+                  // List of exercises 
                   {workout.exercises && workout.exercises.length > 0 && (
                     <div className="space-y-2">
                       {workout.exercises.map(function (exercise) {

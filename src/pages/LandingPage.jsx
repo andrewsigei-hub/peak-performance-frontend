@@ -22,9 +22,7 @@ function LandingPage() {
 
   return (
     <div className="bg-gray-950 text-white min-h-screen">
-      
       <div className="max-w-7xl mx-auto px-6 py-20 grid grid-cols-1 lg:grid-cols-2 gap-12 items-center">
-       
         <div>
           <h1 className="text-6xl font-bold mb-6 leading-tight">
             Unlock Your
@@ -43,7 +41,6 @@ function LandingPage() {
             Get Started
           </button>
 
-         
           <div className="flex flex-wrap gap-8 mt-6">
             <div
               className="flex items-center gap-2 cursor-pointer"
@@ -76,7 +73,6 @@ function LandingPage() {
         </div>
 
         <div className="space-y-4">
-          
           <div className="bg-gray-900 rounded-2xl p-6 border border-gray-800 hover:border-yellow-400 transition">
             <div className="flex items-start gap-4">
               <Activity className="text-yellow-400 shrink-0" size={40} />
@@ -89,8 +85,6 @@ function LandingPage() {
               </div>
             </div>
           </div>
-
-  
           <div className="bg-gray-900 rounded-2xl p-6 border border-gray-800 hover:border-yellow-400 transition">
             <div className="flex items-start gap-4">
               <Dumbbell className="text-yellow-400 shrink-0" size={40} />
@@ -103,8 +97,7 @@ function LandingPage() {
               </div>
             </div>
           </div>
-
-          {/* Track Meals Card */}
+          // Track Meals Card
           <div className="bg-gray-900 rounded-2xl p-6 border border-gray-800 hover:border-yellow-400 transition">
             <div className="flex items-start gap-4">
               <Apple className="text-yellow-400 shrink-0" size={40} />
@@ -119,7 +112,6 @@ function LandingPage() {
           </div>
         </div>
       </div>
-
 
       <section className="max-w-7xl mx-auto px-6 py-20 grid grid-cols-1 md:grid-cols-3 gap-12">
         <div className="bg-gray-900 rounded-2xl p-8 border border-gray-800 text-center">
