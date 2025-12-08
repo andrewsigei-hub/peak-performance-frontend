@@ -2,18 +2,22 @@ import { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 
 function Navbar() {
+  // Stores if user is logged in
   const [user, setUser] = useState(null);
   const navigate = useNavigate();
 
   // Check if user is logged in when component loads
   useEffect(function () {
+    // Runs when component mounts
+    // Checks local storage to see if there is a logged in user
+    // If yes then json string is converted back into an object and stored in state
     const storedUser = localStorage.getItem("user");
     if (storedUser) {
       setUser(JSON.parse(storedUser));
     }
-  }, []);
+  }, []); // Empty dependency array means this runs only once on first render
 
-  // Navigation functions
+  // Navigation helper functions
   function goToHome() {
     navigate("/");
   }
@@ -43,16 +47,18 @@ function Navbar() {
   }
 
   // Handle logout
+
+  // Removes them from local storage and updates state
   function handleLogout() {
     localStorage.removeItem("user");
-    setUser(null);
-    navigate("/");
+    setUser(null); // clears user state
+    navigate("/"); // navigates back to homepage
   }
 
   return (
     <nav className="bg-gray-950 border-b border-gray-800 text-white">
       <div className="max-w-7xl mx-auto px-6 py-4 flex items-center justify-between">
-        {/* Logo - Clickable to go home */}
+        {/* Logo / Home link */}
         <h1
           className="text-2xl font-bold text-yellow-400 hover:text-yellow-500 transition cursor-pointer"
           onClick={goToHome}
@@ -92,7 +98,7 @@ function Navbar() {
           >
             Dashboard
           </button>
-          // Show Logout if user is logged in, otherwise Sign In
+
           {user ? (
             <div className="flex items-center gap-4">
               <span className="text-gray-300">Hi, {user.name}</span>
