@@ -2,23 +2,18 @@ import { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 
 function Navbar() {
-  const [isOpen, setIsOpen] = useState(false);
-  const [user, setUser] = useState(null); // Track logged in user
+  const [user, setUser] = useState(null);
   const navigate = useNavigate();
 
   // Check if user is logged in when component loads
   useEffect(function () {
     const storedUser = localStorage.getItem("user");
     if (storedUser) {
-      setUser(JSON.parse(storedUser)); // Not really and issue? Because i have a dependancy array so it only runs once
+      setUser(JSON.parse(storedUser));
     }
   }, []);
 
-  function toggleMenu() {
-    setIsOpen(!isOpen);
-  }
-
-  // Navigation handlers
+  // Navigation functions
   function goToHome() {
     navigate("/");
   }
@@ -35,6 +30,9 @@ function Navbar() {
     navigate("/meals");
   }
 
+  function goToProgress() {
+    navigate("/progress");
+  }
 
   function goToLifts() {
     navigate("/lifts");
@@ -51,17 +49,10 @@ function Navbar() {
     navigate("/");
   }
 
-  // Shared nav items for both desktop + mobile
-  const navItems = [
-    { label: "Meals", action: goToMeals },
-    { label: "Lifts", action: goToLifts },
-    { label: "Runs", action: goToRuns },
-    { label: "Dashboard", action: goToDashboard },
-  ];
-
   return (
     <nav className="bg-gray-950 border-b border-gray-800 text-white">
       <div className="max-w-7xl mx-auto px-6 py-4 flex items-center justify-between">
+        {/* Logo - Clickable to go home */}
         <h1
           className="text-2xl font-bold text-yellow-400 hover:text-yellow-500 transition cursor-pointer"
           onClick={goToHome}
@@ -69,21 +60,40 @@ function Navbar() {
           PeakPerform
         </h1>
 
-        
-        <div className="hidden md:flex items-center gap-6">
-          {navItems.map(function (item) {
-            return (
-              <button
-                key={item.label}
-                onClick={item.action}
-                className="text-gray-300 hover:text-white transition-colors"
-              >
-                {item.label}
-              </button>
-            );
-          })}
+        {/* Menu */}
+        <div className="flex items-center gap-6">
+          <button
+            onClick={goToMeals}
+            className="text-gray-300 hover:text-white transition-colors"
+          >
+            Meals
+          </button>
+          <button
+            onClick={goToLifts}
+            className="text-gray-300 hover:text-white transition-colors"
+          >
+            Lifts
+          </button>
+          <button
+            onClick={goToRuns}
+            className="text-gray-300 hover:text-white transition-colors"
+          >
+            Runs
+          </button>
+          <button
+            onClick={goToProgress}
+            className="text-gray-300 hover:text-white transition-colors"
+          >
+            Progress
+          </button>
+          <button
+            onClick={goToDashboard}
+            className="text-gray-300 hover:text-white transition-colors"
+          >
+            Dashboard
+          </button>
 
-          
+          {/* Show Logout if user is logged in, otherwise Sign In */}
           {user ? (
             <div className="flex items-center gap-4">
               <span className="text-gray-300">Hi, {user.name}</span>
@@ -103,93 +113,7 @@ function Navbar() {
             </button>
           )}
         </div>
-
-        
-        <div className="md:hidden">
-          <button
-            onClick={toggleMenu}
-            className="focus:outline-none text-gray-300 hover:text-white"
-          >
-            {isOpen ? (
-              <svg
-                xmlns="http://www.w3.org/2000/svg"
-                className="h-6 w-6"
-                fill="none"
-                viewBox="0 0 24 24"
-                stroke="currentColor"
-              >
-                <path
-                  strokeLinecap="round"
-                  strokeLinejoin="round"
-                  strokeWidth={2}
-                  d="M6 18L18 6M6 6l12 12"
-                />
-              </svg>
-            ) : (
-              <svg
-                xmlns="http://www.w3.org/2000/svg"
-                className="h-6 w-6"
-                fill="none"
-                viewBox="0 0 24 24"
-                stroke="currentColor"
-              >
-                <path
-                  strokeLinecap="round"
-                  strokeLinejoin="round"
-                  strokeWidth={2}
-                  d="M4 6h16M4 12h16M4 18h16"
-                />
-              </svg>
-            )}
-          </button>
-        </div>
       </div>
-
-    // Mobile Menu
-      {isOpen && (
-        <div className="md:hidden px-6 pb-4 flex flex-col gap-3">
-          {navItems.map(function (item) {
-            return (
-              <button
-                key={item.label}
-                onClick={function () {
-                  item.action();
-                  setIsOpen(false);
-                }}
-                className="text-gray-300 hover:text-white transition-colors text-left"
-              >
-                {item.label}
-              </button>
-            );
-          })}
-
-          
-          {user ? (
-            <>
-              <span className="text-gray-300">Hi, {user.name}</span>
-              <button
-                onClick={function () {
-                  handleLogout();
-                  setIsOpen(false);
-                }}
-                className="bg-gray-800 text-white px-6 py-2 rounded-lg font-semibold hover:bg-gray-700 transition-colors"
-              >
-                Logout
-              </button>
-            </>
-          ) : (
-            <button
-              onClick={function () {
-                goToLogin();
-                setIsOpen(false);
-              }}
-              className="bg-yellow-400 text-black px-6 py-2 rounded-lg font-semibold hover:bg-yellow-500 transition-colors"
-            >
-              Sign In
-            </button>
-          )}
-        </div>
-      )}
     </nav>
   );
 }
