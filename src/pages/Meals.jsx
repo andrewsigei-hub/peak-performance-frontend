@@ -99,7 +99,7 @@ function Meals() {
       <Navbar />
 
       <div className="max-w-7xl mx-auto px-6 py-8">
-        {/* Page header */}
+        // Header + Add Meal button
         <div className="flex justify-between items-center mb-8">
           <h1 className="text-4xl font-bold">Nutrition Tracker</h1>
           <button
@@ -112,7 +112,7 @@ function Meals() {
           </button>
         </div>
 
-        {/* Form to add meal */}
+        // Form to add meal
         {showForm && (
           <form
             onSubmit={handleAddMeal}
@@ -215,7 +215,7 @@ function Meals() {
           </form>
         )}
 
-        {/* Display meals */}
+        // Meals grid
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
           {meals.length === 0 ? (
             <div className="col-span-full bg-gray-900 p-8 rounded-xl border border-gray-800 text-center text-gray-400">
@@ -228,7 +228,7 @@ function Meals() {
                   key={meal.id}
                   className="bg-gray-900 p-6 rounded-xl border border-gray-800 hover:border-yellow-400 transition"
                 >
-                  {/* Date and Delete Button */}
+                  // Date + Delete button
                   <div className="flex justify-between items-start mb-3">
                     <div className="text-sm text-gray-400">{meal.date}</div>
                     <button
@@ -241,15 +241,15 @@ function Meals() {
                     </button>
                   </div>
 
-                  {/* Meal name */}
+                  // Meal Name
                   <div className="text-xl font-bold mb-1">{meal.name}</div>
 
-                  {/* Calories */}
+                  // Calories 
                   <div className="text-3xl font-bold text-yellow-400 mb-3">
                     {meal.calories} cal
                   </div>
 
-                  {/* Macros breakdown */}
+                  // Macros breakdown 
                   <div className="bg-gray-950 p-3 rounded-lg">
                     <div className="grid grid-cols-3 gap-2 text-sm">
                       <div>
