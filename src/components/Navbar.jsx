@@ -92,8 +92,7 @@ function Navbar() {
           >
             Dashboard
           </button>
-
-          {/* Show Logout if user is logged in, otherwise Sign In */}
+          // Show Logout if user is logged in, otherwise Sign In
           {user ? (
             <div className="flex items-center gap-4">
               <span className="text-gray-300">Hi, {user.name}</span>
