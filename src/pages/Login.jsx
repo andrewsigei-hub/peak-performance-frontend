@@ -92,10 +92,9 @@ function Login() {
               : "Sign in to continue your journey"}
           </p>
         </div>
-        // Form Container
+
         <div className="bg-gray-900 rounded-2xl p-8 border border-gray-800">
           <form onSubmit={handleSubmit}>
-            // Name Input for Signup
             {isSignup && (
               <div className="mb-4">
                 <label className="block text-sm font-medium text-gray-300 mb-2">
@@ -113,7 +112,7 @@ function Login() {
                 />
               </div>
             )}
-            // Email Input
+
             <div className="mb-6">
               <label className="block text-sm font-medium text-gray-300 mb-2">
                 Email Address
@@ -143,7 +142,7 @@ function Login() {
               {isSignup ? "Create Account" : "Sign In"}
             </button>
           </form>
-          // Toggle Between Signup/Login
+
           <div className="mt-6 text-center">
             <button
               onClick={toggleMode}
@@ -154,7 +153,7 @@ function Login() {
                 : "Don't have an account? Sign up"}
             </button>
           </div>
-          // Back to Home Link
+
           <div className="mt-4 text-center">
             <button
               onClick={function () {

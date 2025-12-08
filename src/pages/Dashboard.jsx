@@ -12,7 +12,7 @@ function Dashboard() {
   // Get user data from backend
   function fetchUserData(userId) {
     // Fetch workouts
-    fetch(`http://localhost:8000/workouts?user_id=${userId}`)
+    fetch(`http://localhost:8000/workouts?user_id=${userId}`) // Endpoints filtered by user ID, so user only sees there workouts
       .then(function (response) {
         return response.json();
       })
@@ -22,7 +22,7 @@ function Dashboard() {
       });
 
     // Fetch meals
-    fetch(`http://localhost:8000/meals?user_id=${userId}`)
+    fetch(`http://localhost:8000/meals?user_id=${userId}`) // Again filtered by user ID, so user only sees there meals
       .then(function (response) {
         return response.json();
       })
@@ -33,13 +33,16 @@ function Dashboard() {
 
   // Calculate total distance from workouts
   function calculateTotalDistance() {
+    // sums up all distance_km values from workouts
     let total = 0;
     for (let i = 0; i < workouts.length; i++) {
+      // iterate through workouts
       if (workouts[i].distance_km) {
-        total = total + workouts[i].distance_km;
+        // check if distance_km exists
+        total = total + workouts[i].distance_km; // add to total
       }
     }
-    return total.toFixed(1);
+    return total; // return total rounded to 1 decimal place
   }
 
   // Run when page loads - check if user is logged in
@@ -47,7 +50,7 @@ function Dashboard() {
     function () {
       const storedUser = localStorage.getItem("user");
 
-      if (!storedUser) {
+      if (!storedUser) { // forces login
         // No user found, send to login
         navigate("/login");
         return;
@@ -58,14 +61,8 @@ function Dashboard() {
       setUser(userData);
       fetchUserData(userData.id);
     },
-    [navigate]
+    [navigate] // dependancy array runs again if navigate changes - rare
   );
-
-  // Logout function
-  function handleLogout() {
-    localStorage.removeItem("user");
-    navigate("/");
-  }
 
   // Show nothing while loading
   if (!user) {
